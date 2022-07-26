@@ -6,12 +6,18 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
+@ApiBearerAuth('access-token')
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 @ApiTags('users')
 export class UsersController {
@@ -22,6 +28,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll() {
     return this.usersService.findAll();

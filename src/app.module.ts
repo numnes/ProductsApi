@@ -3,6 +3,7 @@ import { ProductsModule } from './products/products.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
 
 const dotEnvConfig = ConfigModule.forRoot({
@@ -18,6 +19,6 @@ const mainMongoConfig = MongooseModule.forRootAsync({
 });
 
 @Module({
-  imports: [ProductsModule, UsersModule, dotEnvConfig, mainMongoConfig],
+  imports: [ProductsModule, UsersModule, dotEnvConfig, mainMongoConfig, AuthModule],
 })
 export class AppModule {}

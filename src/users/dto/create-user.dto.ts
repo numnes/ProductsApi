@@ -4,14 +4,12 @@ import {
   MinLength,
   MaxLength,
   IsEmail,
+  IsNumber,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @IsString()
-  @ApiProperty({
-    description: 'User external identifyer',
-  })
+  @IsNumber()
   id?: number;
 
   @IsString()
