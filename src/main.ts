@@ -20,7 +20,6 @@ async function bootstrap() {
       'access-token',
     )
     .build();
-
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
@@ -31,6 +30,6 @@ async function bootstrap() {
     allowedHeaders: '*',
   });
 
-  await app.listen(3001);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
