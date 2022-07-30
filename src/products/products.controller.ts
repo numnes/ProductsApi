@@ -7,12 +7,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { GetProductsQueryDto } from './dto/get-products-query.dto';
 
 @ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard)
@@ -27,8 +29,13 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  findAll(@Query() params: GetProductsQueryDto) {
+    return this.productsService.findAll(
+      params.page,
+      params.per_page,
+      params.search_field,
+      params.search,
+    );
   }
 
   @Get(':id')

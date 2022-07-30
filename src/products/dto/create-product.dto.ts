@@ -1,12 +1,22 @@
-import { IsString, IsNotEmpty, IsNumber, IsUrl } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsUrl,
+  IsOptional,
+  IsEmpty,
+  IsCurrency,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDto {
+  @IsOptional()
+  @IsEmpty()
   @IsNumber()
   @ApiProperty({
     description: 'Product external identifyer',
   })
-  id?: number;
+  id?: number | null;
 
   @IsString()
   @IsNotEmpty()
@@ -16,6 +26,7 @@ export class CreateProductDto {
   })
   name: string;
 
+  @IsOptional()
   @IsString()
   @ApiProperty({
     description: 'Product bar code',
@@ -23,6 +34,7 @@ export class CreateProductDto {
   })
   barCode?: string;
 
+  @IsOptional()
   @IsString()
   @ApiProperty({
     description: 'Product description',
@@ -31,6 +43,7 @@ export class CreateProductDto {
   })
   description?: string;
 
+  @IsOptional()
   @IsString()
   @IsUrl()
   @ApiProperty({
@@ -39,4 +52,20 @@ export class CreateProductDto {
       'https://res.cloudinary.com/nunes/image/upload/v1632252466/example.png',
   })
   image?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    description: 'Product category',
+    example: 'Toy',
+  })
+  category: string;
+
+  @IsOptional()
+  @IsCurrency()
+  @ApiProperty({
+    description: 'Product price',
+    example: 12.25,
+  })
+  price: number;
 }

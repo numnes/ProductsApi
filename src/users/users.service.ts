@@ -53,7 +53,7 @@ export class UsersService {
   }
 
   findOne(id: number) {
-    return this.userModel.findById(id);
+    return this.userModel.findOne({ id });
   }
 
   findByEmail(email: string) {
@@ -61,10 +61,10 @@ export class UsersService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return this.userModel.findByIdAndUpdate(id, updateUserDto);
+    return this.userModel.findOneAndUpdate({ id }, updateUserDto);
   }
 
   remove(id: number) {
-    return this.userModel.findByIdAndRemove(id);
+    return this.userModel.findOneAndRemove({ id });
   }
 }

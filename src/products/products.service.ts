@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { randomInt } from 'crypto';
 import { Model } from 'mongoose';
 import { CreateProductDto } from './dto/create-product.dto';
+import { ResponseFindProductsDto } from './dto/response-find-products.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 
@@ -12,23 +14,52 @@ export class ProductsService {
     private readonly productModel: Model<Product>,
   ) {}
 
-  create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto): Promise<Product> {
+    if (!createProductDto.id) {
+      let id = randomInt(1, 999999999999);
+      while (await this.findOne(id)) {
+        id = randomInt(1, 999999999999);
+      }
+      createProductDto.id = id;
+    }
     return this.productModel.create(createProductDto);
   }
 
-  findAll() {
-    return this.productModel.find();
+  async findAll(
+    perPage: number = 10,
+    page: number = 1,
+    searchField?: string,
+    search?: string,
+  ): Promise<ResponseFindProductsDto> {
+    const query = this.productModel.find({});
+    if (searchField && search) {
+      query
+        .where(searchField)
+        .equals({ $regex: search.toLocaleLowerCase(), $options: 'i' });
+    }
+    const total = await query.clone().countDocuments().exec();
+
+    const data = await query
+      .clone()
+      .skip((perPage - 1) * page)
+      .limit(page)
+      .exec();
+
+    return { total, data };
   }
 
-  findOne(id: number) {
-    return this.productModel.findById(id);
+  async findOne(id: number): Promise<Product> {
+    return this.productModel.findOne({ id });
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return this.productModel.findByIdAndUpdate(id, updateProductDto);
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
+    return this.productModel.findOneAndUpdate({ id }, updateProductDto);
   }
 
   remove(id: number) {
-    return this.productModel.findByIdAndRemove(id);
+    return this.productModel.findOneAndDelete({ id });
   }
 }
