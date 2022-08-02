@@ -7,7 +7,7 @@
  A aplicação completa está hospedada em : https://productsfront.herokuapp.com 
 
 ### Execução
-Este projeto foi criado em NestJs, e utiliza o MongoDB como banco de dados, para executá-lo basta clonar o repositório em uma máquina com o NodeJs instalado e executar os comando abaixo:
+Este projeto foi criado em NestJs, e utiliza o MongoDB como banco de dados, para executá-lo basta clonar o repositório em uma máquina com o NodeJs instalado e executar os comandos abaixo:
 
 ```bash
 ## Npm 
